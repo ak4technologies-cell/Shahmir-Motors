@@ -1,0 +1,28 @@
+[
+    {
+        "id": 2,
+        "name": "Toyota Corolla XLi",
+        "category": "For Sale",
+        "model": "2013",
+        "price": "2550000",
+        "status": "Available",
+        "mileage": "N/A",
+        "color": "White",
+        "registration": "Punjab",
+        "details": "Toyota Corolla XLi (2013) — Punjab registered, interior original seals intact, exterior minor touching. Demand: 25.5 Lac. Available at Shahmir Motors, Lehtrar Road, Near Paracha Chok, Islamabad.",
+        "images": [
+            "car_images\\car2_1_WhatsApp Image 2026-11-18 at 10.15.58 PM (2).jpeg",
+            "car_images\\car2_2_WhatsApp Image 2026-11-18 at 10.15.58 PM (1).jpeg",
+            "car_images\\car2_3_WhatsApp Image 2026-11-18 at 10.15.58 PM.jpeg",
+            "car_images\\car2_4_WhatsApp Image 2026-11-18 at 10.15.57 PM (1).jpeg",
+            "car_images\\car2_5_WhatsApp Image 2026-11-18 at 10.15.57 PM.jpeg",
+            "car_images\\car2_6_WhatsApp Image 2026-11-18 at 10.15.56 PM (2).jpeg",
+            "car_images\\car2_7_WhatsApp Image 2026-11-18 at 10.15.56 PM (1).jpeg",
+            "car_images\\car2_8_WhatsApp Image 2026-11-18 at 10.15.56 PM.jpeg",
+            "car_images\\car2_9_WhatsApp Image 2026-11-18 at 10.15.55 PM.jpeg",
+            "car_images\\car2_10_WhatsApp Image 2026-11-18 at 10.15.54 PM (1).jpeg",
+            "car_images\\car2_11_WhatsApp Image 2026-11-18 at 10.15.54 PM.jpeg",
+            "car_images\\car2_12_WhatsApp Image 2026-11-18 at 10.15.53 PM (1).jpeg"
+        ]
+    }
+]
