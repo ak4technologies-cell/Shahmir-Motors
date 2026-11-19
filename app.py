@@ -66,9 +66,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-DATA_FILE = "shahmir_cars.json"
-IMAGE_DIR = "car_images"
-TEAM_IMAGE = "team.jpg"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_FILE = os.path.join(BASE_DIR, "shahmir_cars.json")
+IMAGE_DIR = os.path.join(BASE_DIR, "car_images")
+TEAM_IMAGE = os.path.join(BASE_DIR, "team.jpg")
 
 TEAM_MEMBERS = [
     {"name": "SHAFIQ KHAN", "display_phone": "0334-9510205", "wa": "923349510205"},
@@ -77,6 +78,22 @@ TEAM_MEMBERS = [
 ]
 
 os.makedirs(IMAGE_DIR, exist_ok=True)
+
+
+def resolve_image_path(img_path):
+    if not img_path:
+        return None
+    base_name = os.path.basename(str(img_path))
+    candidates = [
+        str(img_path),
+        os.path.join(BASE_DIR, str(img_path)),
+        os.path.join(IMAGE_DIR, base_name),
+        os.path.join(BASE_DIR, base_name),
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            return p
+    return None
 
 
 def load_cars():
@@ -211,7 +228,7 @@ if st.session_state.active_page == "add":
                     img_path = os.path.join(IMAGE_DIR, safe_name)
                     with open(img_path, "wb") as f:
                         f.write(up_file.getbuffer())
-                    saved_images.append(img_path)
+                    saved_images.append(os.path.join("car_images", safe_name))
 
                 new_car = {
                     "id": next_id,
@@ -256,7 +273,11 @@ elif st.session_state.selected_car_id is not None:
     st.subheader(f"{selected_car['name']} ({selected_car['model']})")
 
     img_col, info_col = st.columns([1.3, 1])
-    valid_imgs = [p for p in selected_car.get("images", []) if p and os.path.exists(p)]
+    valid_imgs = [
+        resolved
+        for p in selected_car.get("images", [])
+        if (resolved := resolve_image_path(p)) is not None
+    ]
 
     with img_col:
         if valid_imgs:
@@ -340,7 +361,11 @@ else:
             for idx, car in enumerate(filtered):
                 with cols[idx % 3]:
                     with st.container(border=True):
-                        imgs = [p for p in car.get("images", []) if p and os.path.exists(p)]
+                        imgs = [
+                            resolved
+                            for p in car.get("images", [])
+                            if (resolved := resolve_image_path(p)) is not None
+                        ]
                         if imgs:
                             st.image(imgs[0], use_container_width=True)
                         st.markdown(f"**{car['name']}** ({car['model']})")
