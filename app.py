@@ -12,40 +12,109 @@ st.set_page_config(
 
 st.markdown("""
     <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    html, body, [class*="css"] {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .stApp {
+        background:
+            radial-gradient(circle at 12% 8%, rgba(239, 68, 68, 0.08), transparent 34%),
+            radial-gradient(circle at 88% 12%, rgba(59, 130, 246, 0.08), transparent 36%),
+            linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+
+    /* New-Gen Digital Hero Banner */
     .sm-header {
-        background: linear-gradient(120deg, #991b1b 0%, #dc2626 55%, #1e293b 100%);
-        padding: 24px 28px;
-        border-radius: 14px;
-        color: white;
-        margin-bottom: 14px;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #090d16 0%, #161f33 48%, #7f1d1d 100%);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        box-shadow: 0 22px 45px -15px rgba(15, 23, 42, 0.45);
+        padding: 28px 32px;
+        border-radius: 22px;
+        color: #ffffff;
+        margin-bottom: 18px;
+    }
+    .sm-badge {
+        display: inline-block;
+        background: rgba(239, 68, 68, 0.22);
+        border: 1px solid rgba(248, 113, 113, 0.45);
+        color: #fecaca;
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        padding: 5px 12px;
+        border-radius: 999px;
+        margin-bottom: 10px;
     }
     .sm-header h1 {
-        color: white;
+        color: #ffffff;
         margin: 0;
-        font-size: 2rem;
+        font-size: 2.15rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
     }
     .sm-sub {
-        color: #fef2f2;
-        margin: 6px 0 10px 0;
+        color: #e2e8f0;
+        margin: 8px 0 14px 0;
         font-size: 1rem;
+        line-height: 1.55;
+        max-width: 880px;
     }
     .sm-meta {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         color: #fde68a;
-        font-size: 0.92rem;
+        font-size: 0.9rem;
         font-weight: 600;
+        padding: 8px 14px;
+        border-radius: 12px;
     }
+
+    /* Metric Cards Styling */
+    [data-testid="stMetric"] {
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(148, 163, 184, 0.22);
+        border-radius: 18px;
+        padding: 16px 20px;
+        box-shadow: 0 10px 24px -12px rgba(15, 23, 42, 0.14);
+    }
+    [data-testid="stMetricLabel"] {
+        font-weight: 600;
+        color: #475569;
+    }
+    [data-testid="stMetricValue"] {
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    /* Price Pill */
     .sm-price {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #b91c1c;
-        margin: 4px 0 8px 0;
+        display: inline-block;
+        font-size: 1.12rem;
+        font-weight: 800;
+        color: #dc2626;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        padding: 4px 12px;
+        border-radius: 10px;
+        margin: 6px 0 10px 0;
     }
+
+    /* Team Card */
     .team-card {
-        background-color: #f8fafc;
-        border-left: 4px solid #dc2626;
-        padding: 10px 12px;
-        border-radius: 8px;
+        background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+        border: 1px solid #e2e8f0;
+        border-left: 4px solid #ef4444;
+        padding: 12px 14px;
+        border-radius: 14px;
         margin-bottom: 8px;
+        box-shadow: 0 6px 16px -10px rgba(15, 23, 42, 0.18);
     }
     .team-name {
         font-weight: 700;
@@ -54,14 +123,52 @@ st.markdown("""
         margin: 0;
     }
     .team-phone {
-        color: #b91c1c;
-        font-weight: 600;
+        color: #dc2626;
+        font-weight: 700;
         font-size: 0.88rem;
-        margin: 2px 0 0 0;
+        margin: 3px 0 0 0;
     }
-    .stButton > button {
-        border-radius: 8px;
-        font-weight: 600;
+
+    /* New-Gen Buttons & Link Buttons */
+    .stButton > button,
+    [data-testid="stLinkButton"] > a {
+        border-radius: 999px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.01em !important;
+        padding: 0.55rem 1.15rem !important;
+        background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.18) !important;
+        box-shadow: 0 10px 20px -8px rgba(220, 38, 38, 0.55) !important;
+        transition: all 0.2s ease !important;
+    }
+    .stButton > button:hover,
+    [data-testid="stLinkButton"] > a:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 14px 26px -8px rgba(220, 38, 38, 0.72) !important;
+        filter: brightness(1.05);
+    }
+    .stButton > button:active,
+    [data-testid="stLinkButton"] > a:active {
+        transform: translateY(0px) scale(0.99) !important;
+    }
+
+    /* Bordered Vehicle Cards */
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        border-radius: 20px !important;
+        background: rgba(255, 255, 255, 0.92) !important;
+        border: 1px solid rgba(148, 163, 184, 0.24) !important;
+        box-shadow: 0 12px 28px -14px rgba(15, 23, 42, 0.18) !important;
+        transition: transform 0.22s ease, box-shadow 0.22s ease !important;
+    }
+    [data-testid="stVerticalBlockBorderWrapper"]:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 36px -14px rgba(15, 23, 42, 0.25) !important;
+    }
+
+    /* Rounded Images */
+    [data-testid="stImage"] img {
+        border-radius: 14px;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -132,7 +239,7 @@ def go_add():
 
 
 # ==================== LEFT SIDEBAR ====================
-st.sidebar.title("SK • Shahmir Motors")
+st.sidebar.title("⚡ Shahmir Motors")
 st.sidebar.caption("Lehtrar Road, Near Paracha Chok, Islamabad")
 
 if st.sidebar.button("🏠 Home (Showroom & Fleet)", use_container_width=True):
@@ -165,6 +272,7 @@ st.sidebar.caption("Services: Sale & Purchase • Rent A Car • Tour & Travels 
 # ==================== MAIN HEADER ====================
 st.markdown("""
     <div class="sm-header">
+        <div class="sm-badge">✨ Digital Showroom • All Pakistan Fleet</div>
         <h1>🚗 SHAHMIR MOTORS & RENT A CAR</h1>
         <div class="sm-sub">Tour & Travels • Real Estate — Pakistan ke tamam shehron ke liye gariyan rent par dastiyab hain, aur choti bari gariyon ki kharid-o-farokht ka ba-aitmad idara.</div>
         <div class="sm-meta">📍 Lehtrar Road, Near Paracha Chok, Islamabad &nbsp;|&nbsp; 📞 0334-9510205 • 0333-5003222 • 0301-5124347</div>
@@ -172,7 +280,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Top Quick Home / Add Bar
-nav1, nav2, nav3 = st.columns([1.2, 1.2, 4])
+nav1, nav2, nav3 = st.columns([1.3, 1.4, 3.3])
 with nav1:
     if st.button("🏠 Home", key="top_home_btn", use_container_width=True):
         go_home()
