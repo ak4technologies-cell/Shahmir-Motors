@@ -1,6 +1,6 @@
 [
     {
-        "id": 2,
+        "id": 1,
         "name": "Toyota Corolla XLi",
         "category": "For Sale",
         "model": "2013",
@@ -16,8 +16,33 @@
             "3.jpeg",
             "4.jpeg",
             "5.jpeg",
-            "6.jpeg",
-            "7.jpeg"
+            "6.jpeg"
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Suzuki Alto VXR (2024)",
+        "category": "For Sale",
+        "model": "2024",
+        "price": "2890000",
+        "status": "Available",
+        "mileage": "N/A",
+        "color": "White",
+        "registration": "Islamabad",
+        "details": "Suzuki Alto VXR (2024) - Islamabad registered, clean family car.",
+        "images": [
+            "7.jpeg",
+            "8.jpeg",
+            "9.jpeg",
+            "10.jpeg",
+            "11.jpeg",
+            "12.jpeg",
+            "13.jpeg",
+            "14.jpeg",
+            "15.jpeg",
+            "16.jpeg",
+            "17.jpeg",
+            "18.jpeg"
         ]
     }
 ]
