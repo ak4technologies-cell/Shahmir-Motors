@@ -10,6 +10,9 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# ==================== ADMIN SECURITY ====================
+ADMIN_PASSCODE = "shahmir786"
+
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -187,19 +190,40 @@ TEAM_MEMBERS = [
 os.makedirs(IMAGE_DIR, exist_ok=True)
 
 
+def _index_repo_images():
+    """Scan BASE_DIR and IMAGE_DIR so images work whether in root or car_images/."""
+    found = {}
+    search_dirs = [IMAGE_DIR, BASE_DIR]
+    valid_exts = {".jpg", ".jpeg", ".png", ".webp"}
+    for folder in search_dirs:
+        if os.path.isdir(folder):
+            for fname in os.listdir(folder):
+                full_p = os.path.join(folder, fname)
+                if os.path.isfile(full_p):
+                    ext = os.path.splitext(fname)[1].lower()
+                    if ext in valid_exts:
+                        found.setdefault(fname.lower(), full_p)
+    return found
+
+
 def resolve_image_path(img_path):
     if not img_path:
         return None
-    base_name = os.path.basename(str(img_path))
+    raw_str = str(img_path)
+    base_name = os.path.basename(raw_str)
     candidates = [
-        str(img_path),
-        os.path.join(BASE_DIR, str(img_path)),
+        raw_str,
+        os.path.join(BASE_DIR, raw_str),
         os.path.join(IMAGE_DIR, base_name),
         os.path.join(BASE_DIR, base_name),
     ]
     for p in candidates:
-        if os.path.exists(p):
+        if os.path.exists(p) and os.path.isfile(p):
             return p
+
+    repo_map = _index_repo_images()
+    if base_name.lower() in repo_map:
+        return repo_map[base_name.lower()]
     return None
 
 
@@ -215,9 +239,9 @@ def load_cars():
     return []
 
 
-def save_cars(cars):
+def save_cars(cars_data):
     with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(cars, f, indent=4, ensure_ascii=False)
+        json.dump(cars_data, f, indent=4, ensure_ascii=False)
 
 
 cars = load_cars()
@@ -226,15 +250,21 @@ if "selected_car_id" not in st.session_state:
     st.session_state.selected_car_id = None
 if "active_page" not in st.session_state:
     st.session_state.active_page = "home"
+if "is_admin" not in st.session_state:
+    st.session_state.is_admin = False
+if "editing_car_id" not in st.session_state:
+    st.session_state.editing_car_id = None
 
 
 def go_home():
     st.session_state.selected_car_id = None
+    st.session_state.editing_car_id = None
     st.session_state.active_page = "home"
 
 
 def go_add():
     st.session_state.selected_car_id = None
+    st.session_state.editing_car_id = None
     st.session_state.active_page = "add"
 
 
@@ -251,10 +281,32 @@ if st.sidebar.button("➕ Add New Vehicle", use_container_width=True):
     st.rerun()
 
 st.sidebar.divider()
+st.sidebar.subheader("🔐 Admin Access (Edit / Delete)")
+
+if not st.session_state.is_admin:
+    with st.sidebar.form("admin_login_form", clear_on_submit=True):
+        pass_input = st.text_input("Admin Password", type="password", placeholder="Password enter karein...")
+        unlock_btn = st.form_submit_button("🔓 Unlock Admin", use_container_width=True)
+        if unlock_btn:
+            if pass_input == ADMIN_PASSCODE:
+                st.session_state.is_admin = True
+                st.success("Admin access unlocked!")
+                st.rerun()
+            else:
+                st.error("Galat password! Sirf admin edit/delete kar sakta hai.")
+else:
+    st.sidebar.success("🟢 Admin Mode Active (Edit & Delete Enabled)")
+    if st.sidebar.button("🔒 Lock Admin Mode", use_container_width=True):
+        st.session_state.is_admin = False
+        st.session_state.editing_car_id = None
+        st.rerun()
+
+st.sidebar.divider()
 st.sidebar.subheader("👥 Our Team")
 
-if os.path.exists(TEAM_IMAGE):
-    st.sidebar.image(TEAM_IMAGE, use_container_width=True)
+team_img_resolved = resolve_image_path(TEAM_IMAGE)
+if team_img_resolved:
+    st.sidebar.image(team_img_resolved, use_container_width=True)
 
 for member in TEAM_MEMBERS:
     st.sidebar.markdown(f"""
@@ -366,18 +418,102 @@ elif st.session_state.selected_car_id is not None:
         go_home()
         st.rerun()
 
-    b1, b2 = st.columns([1.5, 4.5])
+    # Top action row
+    if st.session_state.is_admin:
+        b1, b2, b3 = st.columns([1.6, 1.6, 2.8])
+    else:
+        b1, b3 = st.columns([1.8, 4.2])
+
     with b1:
         if st.button("🏠 Back to Home", key="detail_top_home", use_container_width=True):
             go_home()
             st.rerun()
-    with b2:
-        if st.button("🗑️ Delete Vehicle", type="secondary"):
-            cars = [c for c in cars if c.get("id") != selected_car.get("id")]
-            save_cars(cars)
-            go_home()
+
+    if st.session_state.is_admin:
+        with b2:
+            if st.button("✏️ Edit Vehicle", key="detail_edit_btn", use_container_width=True):
+                st.session_state.editing_car_id = selected_car.get("id")
+                st.rerun()
+        with b3:
+            if st.button("🗑️ Delete Vehicle", key="detail_delete_btn"):
+                cars = [c for c in cars if c.get("id") != selected_car.get("id")]
+                save_cars(cars)
+                go_home()
+                st.rerun()
+    else:
+        with b3:
+            st.caption("🔒 Edit & Delete sirf Admin password enter karne ke baad sidebar se unlock honge.")
+
+    # Admin Edit Mode Form
+    if st.session_state.is_admin and st.session_state.editing_car_id == selected_car.get("id"):
+        st.divider()
+        st.subheader(f"✏️ Edit Vehicle — {selected_car['name']}")
+
+        existing_imgs = selected_car.get("images", [])
+        keep_imgs = st.multiselect(
+            "Mojooda Tasweerein Rakhein (Jo hatani ho unhein unselect karein)",
+            options=existing_imgs,
+            default=existing_imgs
+        )
+
+        with st.form("edit_vehicle_form"):
+            ec1, ec2 = st.columns(2)
+            with ec1:
+                e_name = st.text_input("Gari ka Naam", value=selected_car.get("name", ""))
+                cat_options = ["For Sale", "Rent A Car"]
+                cur_cat = selected_car.get("category", "For Sale")
+                e_cat = st.selectbox("Category", cat_options, index=cat_options.index(cur_cat) if cur_cat in cat_options else 0)
+                e_model = st.text_input("Model Year", value=selected_car.get("model", ""))
+                e_price = st.text_input("Price / Rent Rate", value=selected_car.get("price", ""))
+            with ec2:
+                st_options = ["Available", "Booked / Sold"]
+                cur_st = selected_car.get("status", "Available")
+                e_status = st.selectbox("Status", st_options, index=st_options.index(cur_st) if cur_st in st_options else 0)
+                e_mileage = st.text_input("Mileage", value=selected_car.get("mileage", ""))
+                e_color = st.text_input("Color", value=selected_car.get("color", ""))
+                e_reg = st.text_input("Registration / City", value=selected_car.get("registration", ""))
+
+            new_photos = st.file_uploader(
+                "Mazeed Tasweerein Add Karein (Optional)",
+                type=["jpg", "png", "jpeg", "webp"],
+                accept_multiple_files=True
+            )
+            e_details = st.text_area("Mazeed Tafseelat", value=selected_car.get("details", ""))
+
+            save_edit_btn = st.form_submit_button("💾 Update Vehicle Changes", use_container_width=True)
+            if save_edit_btn:
+                updated_img_list = list(keep_imgs)
+                for idx_img, up_file in enumerate(new_photos or [], start=1):
+                    safe_name = f"car{selected_car.get('id')}_edit_{idx_img}_{up_file.name}"
+                    img_path = os.path.join(IMAGE_DIR, safe_name)
+                    with open(img_path, "wb") as f:
+                        f.write(up_file.getbuffer())
+                    updated_img_list.append(os.path.join("car_images", safe_name))
+
+                for c in cars:
+                    if c.get("id") == selected_car.get("id"):
+                        c["name"] = e_name.strip() or c.get("name", "")
+                        c["category"] = e_cat
+                        c["model"] = e_model.strip() or "N/A"
+                        c["price"] = e_price.strip() or "On Call"
+                        c["status"] = e_status
+                        c["mileage"] = e_mileage.strip() or "N/A"
+                        c["color"] = e_color.strip() or "N/A"
+                        c["registration"] = e_reg.strip() or "Islamabad"
+                        c["details"] = e_details.strip()
+                        c["images"] = updated_img_list
+                        break
+
+                save_cars(cars)
+                st.session_state.editing_car_id = None
+                st.success("✅ Gari ki details update ho gayi hain!")
+                st.rerun()
+
+        if st.button("❌ Cancel Edit", key="cancel_edit_btn"):
+            st.session_state.editing_car_id = None
             st.rerun()
 
+    st.divider()
     st.subheader(f"{selected_car['name']} ({selected_car['model']})")
 
     img_col, info_col = st.columns([1.3, 1])
