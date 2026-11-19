@@ -11,7 +11,7 @@ st.set_page_config(
 )
 
 # ==================== ADMIN SECURITY ====================
-ADMIN_PASSCODE = "shahmir786"
+ADMIN_PASSCODE = "admin123"
 
 st.markdown("""
     <style>
