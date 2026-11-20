@@ -4,7 +4,7 @@ import json
 import urllib.parse
 
 st.set_page_config(
-    page_title="Shahmir Motors & Rent A Car",
+    page_title="Shahmir Motors",
     page_icon="🚗",
     layout="wide",
     initial_sidebar_state="expanded"
