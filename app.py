@@ -12,13 +12,15 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    @media (max-width: 768px) {
+   @media (max-width: 768px) {
         .block-container {
             padding-top: 1.2rem !important;
             padding-left: 0.85rem !important;
             padding-right: 0.85rem !important;
         }
-        .stApp, .stMarkdown, p, span, label, div { color: #111827 !important; }
+        [data-testid="stAppViewContainer"] > .main {
+            color: #111827 !important;
+        }
         div[data-testid="stMetricValue"] {
             font-size: 1.35rem !important;
         }
@@ -26,7 +28,7 @@ st.markdown(
             min-height: 44px !important;
             font-size: 0.95rem !important;
         }
-    }
+    }       
     </style>
     """,
     unsafe_allow_html=True,
