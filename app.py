@@ -325,7 +325,7 @@ st.sidebar.caption("Services: Sale & Purchase • Rent A Car • Tour & Travels 
 st.markdown("""
     <div class="sm-header">
         <div class="sm-badge">✨ Digital Showroom • All Pakistan Fleet</div>
-        <h1>🚗 SHAHMIR MOTORS & RENT A CAR</h1>
+        <h1>🚗 SHAHMIR MOTORS</h1>
         <div class="sm-sub">Tour & Travels • Real Estate — Pakistan ke tamam shehron ke liye gariyan rent par dastiyab hain, aur choti bari gariyon ki kharid-o-farokht ka ba-aitmad idara.</div>
         <div class="sm-meta">📍 Lehtrar Road, Near Paracha Chok, Islamabad &nbsp;|&nbsp; 📞 0334-9510205 • 0333-5003222 • 0301-5124347</div>
     </div>
