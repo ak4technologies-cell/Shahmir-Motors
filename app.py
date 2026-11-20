@@ -18,7 +18,9 @@ st.markdown(
             padding-left: 0.85rem !important;
             padding-right: 0.85rem !important;
         }
-        [data-testid="stAppViewContainer"] > .main {
+        .block-container p,
+        .block-container span,
+        .block-container label {
             color: #111827 !important;
         }
         div[data-testid="stMetricValue"] {
