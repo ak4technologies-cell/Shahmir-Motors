@@ -18,6 +18,7 @@ st.markdown(
             padding-left: 0.85rem !important;
             padding-right: 0.85rem !important;
         }
+        .stApp, .stMarkdown, p, span, label, div { color: #111827 !important; }
         div[data-testid="stMetricValue"] {
             font-size: 1.35rem !important;
         }
