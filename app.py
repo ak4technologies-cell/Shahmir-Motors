@@ -30,6 +30,10 @@ st.markdown(
             min-height: 44px !important;
             font-size: 0.95rem !important;
         }
+        .block-container h1 {
+            color: #ffffff !important;
+            text-align: center !important;
+        }
     }       
     </style>
     """,
